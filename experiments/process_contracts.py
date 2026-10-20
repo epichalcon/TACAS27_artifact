@@ -18,8 +18,6 @@ from tqdm import tqdm
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import json
 
-from utils.notify import send_msg
-
 DIR_PATH = "intermediate/"
 DATE = "20251112"
 DATE = "20260609"
@@ -28,7 +26,7 @@ DATE = "20240226"
 SOL_DIR = f"contracts-{DATE}"
 GASOL_GREEDY_EXEC = "~/gasol-optimizer/gasol_asm.py"
 COMPILATION_OPTION = f"compilation_options_{DATE}.csv"
-COMPILERS_DIR = "/experiments/Systems/ethereum-tools/solc-bin/"
+COMPILERS_DIR = "/home/tacas/TACAS27_artifact/solc-bin-linux-amd64/"
 TIMEOUT = 1200
 WORKERS = 64
 ORIGINAL_CWD = os.getcwd()
@@ -375,8 +373,6 @@ def main(filter, option):
 
 
     clean_up(['*.*~'])
-
-    send_msg("Process contracts finished.")
 
     
 
