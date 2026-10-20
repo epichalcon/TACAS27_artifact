@@ -85,7 +85,7 @@ def get_compiler(fname):
     compiler = list(compilation_options_csv[compilation_options_csv["address"] == fname]["CompilerVersion"])[0]
     compiler = compiler.split("+")[0]
     #compiler = "v0.8.24"
-    compiler = [comp for comp in glob.glob(os.path.join(COMPILERS_DIR, "*")) if os.path.basename(comp).startswith(f"solc-{compiler}")][0]
+    compiler = [comp for comp in glob.glob(os.path.join(COMPILERS_DIR, "*")) if os.path.basename(comp).startswith(f"solc-linux-amd64-{compiler}")][0]
 
     return compiler
 
