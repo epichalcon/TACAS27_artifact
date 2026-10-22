@@ -12,7 +12,7 @@ import time
 
 from optimize_block import evaluate_block, load_model
 from predict import load_cache_artifacts
-from utils.notify import get_last_version, send_msg
+from utils.notify import get_last_version
 from utils.sfs_wrapper import SFSBridge
 
 
@@ -178,4 +178,3 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-    send_msg(f"Finished evaluating sdgs")

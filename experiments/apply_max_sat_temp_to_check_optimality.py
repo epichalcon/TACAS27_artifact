@@ -11,7 +11,6 @@ import shutil
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import sys
 from tqdm import tqdm
-from utils.notify import send_msg
 
 GASOL_GREEDY_EXEC = "~/gasol-optimizer/gasol_asm.py"
 TIMEOUT = 600
@@ -96,5 +95,4 @@ if __name__ == "__main__":
                     print(f"Error: {e}")
                 pbar.update(1)
 
-    send_msg("Max-sat finished")
     

@@ -15,7 +15,7 @@ import sys
 from tqdm import tqdm
 from utils.notify import send_msg
 
-GASOL_GREEDY_EXEC = "~/gasol-optimizer/gasol_asm.py"
+GASOL_GREEDY_EXEC = "/app/gasol-optimizer/gasol_asm.py"
 TIMEOUT = 600
 WORKERS = 64
 
