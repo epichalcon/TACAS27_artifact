@@ -1,0 +1,4 @@
+[submodule "gasol-optimizer"]
+	path = gasol-optimizer
+	url = https://github.com/costa-group/gasol-optimizer.git
+	branch = mzn
