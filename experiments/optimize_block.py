@@ -1,5 +1,4 @@
 import argparse
-from RLloop.predict_rl import main as main_rl
 import random 
 import torch
 import pathlib
