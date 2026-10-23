@@ -11,8 +11,6 @@ import torch
 import time
 
 from optimize_block import evaluate_block, load_model
-from predict import load_cache_artifacts
-from utils.notify import get_last_version
 from utils.sfs_wrapper import SFSBridge
 
 
@@ -61,11 +59,8 @@ def write_results_csv(output_csv: Path | None, details: list[dict]):
 
 def evaluate_sdgs(
     input_dir: Path,
-    dataset_path: Path,
     vocab_path: Path,
-    rl_model: Path,
     g2s_model: Path,
-    evaluate: str,
     output_csv: Path,
     limit: int | None = None,
 ) -> None:
@@ -74,9 +69,14 @@ def evaluate_sdgs(
     if not sdg_paths:
         raise ValueError(f"No .json SDG files found in {input_dir}")
 
-    _, _, vocab = load_cache_artifacts(dataset_path, vocab_path)
-    checkpoint = rl_model if evaluate == "rl" else g2s_model
-    encoder, decoder = load_model(evaluate.upper(), checkpoint, len(vocab))
+    vocab_payload = torch.load(vocab_path, weights_only=False)
+    vocab = vocab_payload.get("vocab")
+
+    if vocab is None:
+        raise KeyError(f"No vocabulary found in {vocab_path}")
+
+    checkpoint = g2s_model
+    encoder, decoder = load_model("G2S", checkpoint, len(vocab))
     sfs = SFSBridge()
     device = torch.device("cpu")
     details = []
@@ -129,9 +129,6 @@ def main() -> None:
         description="Evaluate a model on SDG JSON files in a directory"
     )
     parser.add_argument("--input", required=True, type=Path, help="SDG directory")
-    parser.add_argument("--g2s-model", default=None, type=Path, help="G2S checkpoint path")
-    parser.add_argument("--dataset", default=None, type=Path, help="Dataset cache path")
-    parser.add_argument("--vocab", default=None, type=Path, help="Vocabulary cache path")
     parser.add_argument("--output-csv", default=None, type=Path, help="Output comparison CSV")
     parser.add_argument("--limit", type=int, default=None, help="Maximum files to evaluate")
     parser.add_argument("--seed", type=int, default=42)
@@ -140,15 +137,6 @@ def main() -> None:
     args.input = Path("sdgs") / args.input / "sdgs"
 
     
-    if args.g2s_model is None:
-        model = get_last_version("graph_2_seq", "model")
-        args.g2s_model = Path("graph_2_seq") / f"model{model}" / "best_model.pt"
-    if args.dataset is None or args.vocab is None:
-        cache = get_last_version("graph_2_seq/caches", "cache")
-        if args.dataset is None:
-            args.dataset = Path("graph_2_seq", "caches", f"cache{cache}_val.pt")
-        if args.vocab is None:
-            args.vocab = Path("graph_2_seq", "caches", f"cache{cache}_vocab.pt")
     if args.output_csv is None:
         args.output_csv = Path("statsdir") / f"{args.input.name}_comparison.csv"
 
@@ -157,17 +145,13 @@ def main() -> None:
     try:
         evaluate_sdgs(
             args.input,
-            args.dataset,
-            args.vocab,
-            args.rl_model,
-            args.g2s_model,
-            "g2s",
+            Path("/app/model/vocab.pt"),
+            Path("/app/model/model.pt"),
             args.output_csv,
             args.limit,
         )
     except Exception as exc:
         print(f"Error: {exc}")
-        send_msg(f"Error: {exc}")
         raise
 
 
