@@ -23,7 +23,7 @@ for module_path in (GASOL_DIR, UTILS_DIR):
         sys.path.insert(0, module_path_str)
 
 try:
-    from gasol_optimizer.gasol_asm import (
+    from gasol-optimizer.gasol_asm import (
         parse_blocks_from_plain_instructions,
         compute_original_sfs_with_simplifications,
         compare_asm_block_asm_format,
