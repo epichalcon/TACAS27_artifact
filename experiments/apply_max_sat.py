@@ -12,9 +12,9 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 import sys
 from tqdm import tqdm
 
-GASOL_GREEDY_EXEC = "~/gasol-optimizer/gasol_asm.py"
+GASOL_GREEDY_EXEC = "/app/gasol-optimizer/gasol_asm.py"
 TIMEOUT = 600
-WORKERS = 64
+WORKERS = 4
 
 def process_block(block_id, block_code, res_name, command, sub_res_dir):
     logs_dir = f"{sub_res_dir}/logs"
