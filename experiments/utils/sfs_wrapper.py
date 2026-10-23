@@ -12,7 +12,7 @@ from utils.logger import Logger
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 UTILS_DIR = ROOT_DIR / "utils"
-GASOL_DIR = Path("/app/gasol-optimizer")
+GASOL_DIR = UTILS_DIR / "gasol_optimizer"
 
 # Add both the package parent and the gasol_optimizer root so:
 # 1) `import gasol_optimizer.gasol_asm` works
@@ -23,7 +23,7 @@ for module_path in (GASOL_DIR, UTILS_DIR):
         sys.path.insert(0, module_path_str)
 
 try:
-    from gasol-optimizer.gasol_asm import (
+    from gasol_optimizer.gasol_asm import (
         parse_blocks_from_plain_instructions,
         compute_original_sfs_with_simplifications,
         compare_asm_block_asm_format,
