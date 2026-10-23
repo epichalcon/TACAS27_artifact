@@ -13,7 +13,6 @@ import argparse
 from concurrent.futures import ProcessPoolExecutor, as_completed
 import sys
 from tqdm import tqdm
-from utils.notify import send_msg
 
 GASOL_GREEDY_EXEC = "/app/gasol-optimizer/gasol_asm.py"
 TIMEOUT = 600
@@ -29,7 +28,7 @@ def process_block(block_id, block_code, res_dir):
     with open(block_file, 'w') as f:
         f.write(block_code)
 
-    cmd = f"source ~/gasol-optimizer/venv/bin/activate && timeout --foreground {TIMEOUT} python3 {GASOL_GREEDY_EXEC} -bl {block_file} -sdg"
+    cmd = f"timeout --foreground {TIMEOUT} python3 {GASOL_GREEDY_EXEC} -bl {block_file} -sdg"
 
     # Run command
     log_file = f"{logs_dir}/{block_id}.log"
@@ -139,5 +138,3 @@ if __name__ == "__main__":
         if os.path.exists(f):
             os.remove(f)
 
-    send_msg("sdg processing finished")
-    
