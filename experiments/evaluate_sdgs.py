@@ -129,11 +129,9 @@ def main() -> None:
         description="Evaluate a model on SDG JSON files in a directory"
     )
     parser.add_argument("--input", required=True, type=Path, help="SDG directory")
-    parser.add_argument("--rl-model", default=None, type=Path, help="RL checkpoint path")
     parser.add_argument("--g2s-model", default=None, type=Path, help="G2S checkpoint path")
     parser.add_argument("--dataset", default=None, type=Path, help="Dataset cache path")
     parser.add_argument("--vocab", default=None, type=Path, help="Vocabulary cache path")
-    parser.add_argument("--evaluate", choices=["rl", "g2s"], default="g2s")
     parser.add_argument("--output-csv", default=None, type=Path, help="Output comparison CSV")
     parser.add_argument("--limit", type=int, default=None, help="Maximum files to evaluate")
     parser.add_argument("--seed", type=int, default=42)
@@ -141,9 +139,7 @@ def main() -> None:
 
     args.input = Path("sdgs") / args.input / "sdgs"
 
-    if args.rl_model is None:
-        model = get_last_version("RLloop", "model")
-        args.rl_model = Path("RLloop") / f"model{model}" / "best_rl_model.pt"
+    
     if args.g2s_model is None:
         model = get_last_version("graph_2_seq", "model")
         args.g2s_model = Path("graph_2_seq") / f"model{model}" / "best_model.pt"
@@ -165,7 +161,7 @@ def main() -> None:
             args.vocab,
             args.rl_model,
             args.g2s_model,
-            args.evaluate,
+            "g2s",
             args.output_csv,
             args.limit,
         )
